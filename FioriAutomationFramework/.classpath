@@ -10,5 +10,6 @@
 	<classpathentry kind="lib" path="C:/Users/i343453/Desktop/Selenium/poi-ooxml-schemas-3.17.jar"/>
 	<classpathentry kind="lib" path="C:/Users/i343453/Desktop/Selenium/selenium-server-standalone-3.8.1.jar"/>
 	<classpathentry kind="lib" path="C:/Users/i343453/Desktop/Selenium/xmlbeans-2.6.0.jar"/>
+	<classpathentry kind="con" path="org.testng.TESTNG_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
