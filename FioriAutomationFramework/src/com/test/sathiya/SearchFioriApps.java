@@ -19,12 +19,12 @@ public class SearchFioriApps {
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[text()='Go']")));
 
 			// Capture input fields
-			List<WebElement> list = ul.Captureinput(driver);
+			List<WebElement> list = ul.Captureinput();
 			System.out.println();
 //			ul.Capturebutton(driver);
 			
 			// Enter the values
-			ul.Enterinputs(list , driver);
+			ul.WebDyn_Enterinputs(list);
 
 			driver.findElement(By.xpath("//button//following::*[text()='Go']")).click();
 			
@@ -43,7 +43,7 @@ public class SearchFioriApps {
 				System.out.print("\t");
 			}
 			// Custom Actions
-			ul.customActions();
+			
 			
 		}catch(Exception e){
 			System.out.println("Exception occured : " + e);

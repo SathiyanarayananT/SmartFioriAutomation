@@ -3,20 +3,24 @@ package com.test.sathiya;
 import java.util.List;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class Utilities {
 	
-	public List<WebElement> Captureinput(WebDriver driver){
-		
+	public static final int WaitTimeinSECONDS = 50;
+
+	public List<WebElement> Captureinput(){
+		WebDriver driver = Init.getDriver();
 		boolean result = true;
 		while(result) {
 	        try {
 	    		List<WebElement> list = driver.findElements(By.xpath("//label"));
-//	    		System.out.println(list);
-//	    		List<WebElement> list = driver.findElements(By.xpath("//header/following-sibling::div"));
+	    		
 	    		System.out.println("Total input fields : "+list.size());
 	    		for(WebElement element:list)
 	    		{
@@ -29,20 +33,19 @@ public class Utilities {
 	        }
 		}
 		List<WebElement> list = driver.findElements(By.xpath("//label"));
-//		System.out.println(list);
-//		List<WebElement> list = driver.findElements(By.xpath("//header/following-sibling::div"));
+		
 		System.out.println("Total input fields : "+list.size());
+		
 		for(WebElement element:list)
 		{
 			System.out.println(element.getText());
 		}
 		return list;
 	}
+	
 	//Capture buttons
 	public List<WebElement> Capturebutton(WebDriver driver){
 		List<WebElement> list = driver.findElements(By.xpath("//button"));
-//		System.out.println(list);
-//		List<WebElement> list = driver.findElements(By.xpath("//header/following-sibling::div"));
 		System.out.println("Total input fields : "+list.size());
 		for(WebElement element:list)
 		{
@@ -50,10 +53,11 @@ public class Utilities {
 		}
 		return list;
 	}
+	
 	//Provide input value
-	public void Enterinputs(List<WebElement> list , WebDriver driver) {
+	public void WebDyn_Enterinputs(List<WebElement> list) {
 		// TODO Auto-generated method stub
-		
+		WebDriver driver = Init.getDriver();
 		for(int i=0;i<list.size();i++){
 			ReadWriteExcel rx = new ReadWriteExcel();
 			String value = rx.Read(list.get(i).getText());
@@ -64,8 +68,8 @@ public class Utilities {
 				if(driver.findElements(By.xpath("//span[text()='"+list.get(i).getText()+"']/preceding-sibling::input")).size() > 0){
 					n="//span[text()='"+list.get(i).getText()+"']/preceding-sibling::input";
 				}else{
+					// fall back
 					n = "//*[text()='" +list.get(i).getText()+ "']/following::input";
-//					System.out.println("Fallback");
 				}
 				
 				WebElement wb = driver.findElement(By.xpath(n));
@@ -78,7 +82,6 @@ public class Utilities {
 						    List<WebElement> droplist=drop.findElements(By.tagName("li"));
 						    
 						    for (WebElement li : droplist) {
-//						    	System.out.println(li.getText());
 						    if (li.getText().equals(value)) {
 						         li.click();
 						       }
@@ -98,17 +101,20 @@ public class Utilities {
 	}
 	
 	// Get inputs fields and provide input for table
-	public void EnterValuesTables(WebDriver driver){
+	public void WebDyn_EnterTables(WebDriver driver){
 		
 		List<WebElement> tableinCurrentpage = driver.findElements(By.xpath("//tbody[contains(@id,'content')]"));
 		for(WebElement element : tableinCurrentpage){
-//			System.out.println(element.getAttribute("id"));
+			String Table = "";
 			if(driver.findElements(By.xpath("//tbody[@id='"+ element.getAttribute("id") +"']//preceding::thead//child::*[@role='heading']/span")).size() >0){
 				System.out.println("Table :"+driver.findElement(By.xpath("//tbody[@id='"+ element.getAttribute("id") +"']//preceding::thead//child::*[@role='heading']/span")).getText());
+				Table=driver.findElement(By.xpath("//tbody[@id='"+ element.getAttribute("id") +"']//preceding::thead//child::*[@role='heading']/span")).getText();
 			}else if(driver.findElements(By.xpath("//tbody[@id='"+ element.getAttribute("id") +"']//preceding::tbody//child::*[@role='heading']/span")).size()>0){
 				System.out.println("Table :"+driver.findElement(By.xpath("//tbody[@id='"+ element.getAttribute("id") +"']//preceding::tbody//child::*[@role='heading']/span")).getText());
+				Table=driver.findElement(By.xpath("//tbody[@id='"+ element.getAttribute("id") +"']//preceding::tbody//child::*[@role='heading']/span")).getText();
 			}else if(driver.findElements(By.xpath("//tbody[@id='"+ element.getAttribute("id") +"']//preceding::thead//child::*[@role='heading']")).size()>0){
 				System.out.println("Table :"+driver.findElement(By.xpath("//tbody[@id='"+ element.getAttribute("id") +"']//preceding::thead//child::*[@role='heading']")).getText());
+				Table=driver.findElement(By.xpath("//tbody[@id='"+ element.getAttribute("id") +"']//preceding::thead//child::*[@role='heading']")).getText();
 			}
 			
 			
@@ -116,10 +122,9 @@ public class Utilities {
 			List<WebElement> columns = driver.findElements(By.xpath("//tbody[@id='"+ element.getAttribute("id") +"']//ancestor::div[@role='columnheader']/span/span"));
 			for(WebElement Col : columns){
 				ReadWriteExcel rx = new ReadWriteExcel();				
-				List<String> val = rx.ReadArray(Col.getText());
+				List<String> val = rx.ReadArray(Table, Col.getText());
 				List<WebElement> li = driver.findElements(By.xpath("//span[text()='"+Col.getText().trim()+"']/preceding-sibling::input"));
 				for(int i=0;i<val.size();i++){
-//					System.out.println(val.get(i));
 					driver.findElement(By.id(li.get(i).getAttribute("id"))).clear();
 					driver.findElement(By.id(li.get(i).getAttribute("id"))).sendKeys(val.get(i));
 					String val1 = driver.findElement(By.id(li.get(i).getAttribute("id"))).getAttribute("aria-invalid");
@@ -130,5 +135,34 @@ public class Utilities {
 			}
 			
 		}
+	}
+	
+	// Hard Clear values 
+	public void clearValues(WebElement webElement) {
+		// TODO Auto-generated method stub
+		webElement.sendKeys(Keys.CONTROL + "a");
+		webElement.sendKeys(Keys.DELETE);
+	}
+	
+	// Wait for Elements
+	public void WaitForElement(String Element) {
+		// TODO Auto-generated method stub
+		WebDriverWait wait = new WebDriverWait(Init.getDriver(), WaitTimeinSECONDS);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[text()='"+ Element +"']")));
+	}
+	
+	// Wait for the frame to load
+	public void WaitForFrame() {
+		// TODO Auto-generated method stub
+		WebDriverWait wait = new WebDriverWait(Init.getDriver(), WaitTimeinSECONDS);
+		wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.tagName("iframe")));
+	}
+	public void actionClick() {
+		// TODO Auto-generated method stub
+		
+	}
+	public void inputValues() {
+		// TODO Auto-generated method stub
+		
 	}
 }

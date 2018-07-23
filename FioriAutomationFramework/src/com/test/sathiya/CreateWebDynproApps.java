@@ -13,8 +13,10 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class CreateWebDynproApps {
 	
-	public void CreateApps(WebDriver driver){
+	public void CreateApps(){
+		
 		try{
+			WebDriver driver = Init.getDriver();
 			Utilities ul = new Utilities();
 			
 			// Wait for Frame
@@ -44,11 +46,11 @@ public class CreateWebDynproApps {
 	        });
 			
 			// Get Inputs fields
-			List<WebElement> list =ul.Captureinput(driver);
+			List<WebElement> list =ul.Captureinput();
 			System.out.println();
 			
 			// Enter values
-			ul.WebDyn_Enterinputs(list , driver);
+			ul.WebDyn_Enterinputs(list);
 
 			// Continue button
 			driver.findElement(By.xpath("//*[text()='Continue']/ancestor::div[@role='button']")).click();
@@ -64,9 +66,9 @@ public class CreateWebDynproApps {
 	        });
 			
 			// Inputs fields
-			List<WebElement> list1 = ul.Captureinput(driver);
+			List<WebElement> list1 = ul.Captureinput();
 			// Enter values
-			ul.WebDyn_Enterinputs(list1 , driver);
+			ul.WebDyn_Enterinputs(list1);
 			
 			// Find Tables and enter values
 			System.out.println("Tables present");
