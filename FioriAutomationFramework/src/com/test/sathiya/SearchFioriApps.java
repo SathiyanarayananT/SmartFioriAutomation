@@ -10,7 +10,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class SearchFioriApps {
 
-	public void ManageApps(WebDriver driver){
+	public void SearchApps(WebDriver driver){
 		try{
 			// TODO Auto-generated method stub
 			// Page to get load
