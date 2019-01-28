@@ -14,7 +14,7 @@ public class Init {
 	
 	//Driver initialise
 	public static void Initialize(){
-		System.setProperty("webdriver.gecko.driver", "C:\\Users\\i343453\\Desktop\\Selenium\\geckodriver.exe");
+		System.setProperty("webdriver.gecko.driver", "geckodriver.exe");
 		webdriver = new FirefoxDriver();
 		driver = new EventFiringWebDriver(webdriver);
 		EventHandler handler = new EventHandler();
